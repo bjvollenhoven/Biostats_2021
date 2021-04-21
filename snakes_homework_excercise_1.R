@@ -11,7 +11,7 @@ library(dplyr)
 
 snakes <- read.csv("data/snakes.csv")
 snakes$day = as.factor(snakes$day) #converting day to a factor as it is a continuous variable
-
+#as.factor changes it to factorial date
 
 snakes.aov <- aov(openings ~ as.factor(day) + snake, data = snakes)
 summary(snakes.aov) #p values if greater than 
@@ -20,7 +20,7 @@ str(snakes.aov)
 glimpse(snakes.aov)
 
 snakes.summary <- snakes %>% 
-  group_by(snake, day) %>% 
+  group_by(snake, day) %>% #this is it not get the summarized values of all data in a column combined 
   summarise(mean_openings = mean(openings),
             sd_openings = sd(openings)) %>% 
   ungroup()
@@ -82,8 +82,19 @@ snake_pnt <- ggplot(data = snakes, aes(x = snake, y = openings, fill = snake)) +
 
 snake_pnt
 # -------------------------------------------------------------------------
+snake_pnt2 <- ggplot(data = snakes, aes(x = day, y = openings, fill = snake)) +
+  geom_bar(position = "dodge", stat = "identity", col = "black") +
+  #scale_fill_brewer(pallete = "Pastel2") +
+  scale_fill_manual(values = c("orangered4", "orange4", "olivedrab4", "palegreen3", "plum2", "tomato2")) +
+  labs(x = "Day", 
+       y = "Openings",
+       title = "Comparitive bar graph",
+       subtitle = "Number of openings per snake for each day") +
+  theme_bw() 
+ 
+snake_pnt2
 
-
+# -------------------------------------------------------------------------
 
 snakes.aov <- aov(openings ~ day + snake, data = snakes) #"~" signifies that you
 #are explaining anova of openings with reference to day and snake as variables.
